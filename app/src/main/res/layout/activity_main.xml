@@ -5,23 +5,37 @@
     android:gravity="bottom"
     android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/buffer"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textSize="@dimen/result" />
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
 
-    <TextView
-        android:id="@+id/operation"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textSize="@dimen/operation" />
+        <TextView
+            android:id="@+id/buffer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/result"
+            android:text="123"/>
+
+        <TextView
+            android:layout_width="24dp"
+            android:layout_height="match_parent"
+            android:id="@+id/viewStub" />
+
+        <TextView
+            android:id="@+id/operation"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/operation"
+            android:text="+"/>
+    </LinearLayout>
 
     <TextView
         android:id="@+id/result"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="@dimen/result" />
+        android:textSize="@dimen/result"
+        android:text="1231"/>
 
     <TableLayout
         android:layout_width="match_parent"
