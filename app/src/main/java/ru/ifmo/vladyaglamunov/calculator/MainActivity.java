@@ -111,18 +111,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         update();
     }
 
-    private String convert(double a) {
-        return String.format(Locale.forLanguageTag("RUS"), "%.10g", a);
+    private String convert(double a, int presicion) {
+        return String.format(Locale.forLanguageTag("RUS"), "%." + presicion + "g", a);
     }
 
-    private String beautification(String number) {
+    private String beautification(boolean keepDot, String number) {
         if (number.contains("e")) {
             return number;
         } else {
             int last = number.length() - 1;
             while ((number.charAt(last) == '0') && last > 0) {
                 last--;
-                if (number.charAt(last) == ',' || number.charAt(last) == '.') {
+                if ((number.charAt(last) == ',' || number.charAt(last) == '.') && (power >= 1 || !keepDot)) {
                     last--;
                     break;
                 }
@@ -132,13 +132,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void update() {
-        resultTextView.setText(beautification(convert(currentNumber)));
+        resultTextView.setText(beautification(true, convert(currentNumber, 6)));
         if (bufferNumber == 0) {
             bufferTextView.setText("");
             operationTextView.setText("");
         } else {
             operationTextView.setText(getString(lastOperation.getSign()));
-            bufferTextView.setText(beautification(convert(bufferNumber)));
+            bufferTextView.setText(beautification(false, convert(bufferNumber, 6)));
         }
     }
 
@@ -159,7 +159,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 } else {
                     newNumber = currentNumber * 10 + i * power;
                 }
-                String number = convert(newNumber);
+                String number = convert(newNumber, 6);
                 if (!number.contains("e")) {
                     currentNumber = newNumber;
                     if (power < 1) {
@@ -184,13 +184,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
         if (v == squareRootButton) {
             currentNumber = Math.sqrt(lastOperation.calculate(bufferNumber, currentNumber));
+            lastOperation = new Operation.Nothing();
             bufferNumber = 0;
+            power = 1;
             reset = true;
         }
         if (v == equalsButton) {
             currentNumber = lastOperation.calculate(bufferNumber, currentNumber);
             bufferNumber = 0;
             lastOperation = new Operation.Nothing();
+            power = 1;
             reset = true;
         }
 
@@ -198,24 +201,28 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             bufferNumber = lastOperation.calculate(bufferNumber, currentNumber);
             lastOperation = new Operation.Add();
             currentNumber = 0;
+            power = 1;
             reset = false;
         }
         if (v == subtractButton) {
             bufferNumber = lastOperation.calculate(bufferNumber, currentNumber);
             lastOperation = new Operation.Subtract();
             currentNumber = 0;
+            power = 1;
             reset = false;
         }
         if (v == divideButton) {
             bufferNumber = lastOperation.calculate(bufferNumber, currentNumber);
             lastOperation = new Operation.Divide();
             currentNumber = 0;
+            power = 1;
             reset = false;
         }
         if (v == multiplyButton) {
             bufferNumber = lastOperation.calculate(bufferNumber, currentNumber);
             lastOperation = new Operation.Multiply();
             currentNumber = 0;
+            power = 1;
             reset = false;
         }
 
